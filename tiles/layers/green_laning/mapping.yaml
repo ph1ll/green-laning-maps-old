@@ -1,0 +1,36 @@
+tables:
+  # etldoc: imposm3 -> osm_green_laning_linestring
+  green_laning_linestring:
+    type: linestring
+    columns:
+    - name: osm_id
+      type: id
+    - name: geometry
+      type: geometry
+    - key: name
+      name: name
+      type: string
+    - key: surface
+      name: surface
+      type: string
+    - key: smoothness
+      name: smoothness
+      type: string
+    - key: access
+      name: access
+      type: string
+    - key: vehicle
+      name: vehicle
+      type: string
+    - key: motor_vehicle
+      name: motor_vehicle
+      type: string
+    filters:
+      reject:
+        surface: [ paved, asphalt, concrete, concrete:lanes, cocreate:plates, paving_stones, sett, unhewn_cobblestone, metal, wood, stepping_stones, clay, tartan, artificial_turf, acrylic, metal_grid, carpet ]
+        smoothness: [ excellent, good, intermediate, bad ]
+        access: [ 'no', private, permit, destination, delivery, customers, designated, use_sidepath, dismount, agricultural, forestry, discouraged ]
+        vehicle: [ 'no', private, permit, destination, delivery, customers, use_sidepath, dismount, agricultural, forestry, discouraged ]
+        motor_vehicle: [ 'no', private, permit, destination, delivery, customers, use_sidepath, dismount, agricultural, forestry, discouraged ]
+    mapping:
+      highway: [ track, unclassified ]

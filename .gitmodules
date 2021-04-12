@@ -1,0 +1,3 @@
+[submodule "tiles/openmaptiles"]
+	path = tiles/openmaptiles
+	url = https://github.com/openmaptiles/openmaptiles.git

@@ -1,0 +1,20 @@
+layer:
+  id: "green_laning"
+  description: |
+    **green_laning** contains tracks for green laning.
+  buffer_size: 4
+  datasource:
+    query: (SELECT geometry, name, surface, smoothness, access, vehicle, motor_vehicle FROM layer_green_laning(!bbox!, z(!scale_denominator!))) AS t
+  fields:
+    name:
+    surface:
+    smoothness:
+    access:
+    vehicle:
+    motor_vehicle:
+schema:
+  - ./green_laning.sql
+datasources:
+  - type: imposm3
+    mapping_file: ./mapping.yaml
+  

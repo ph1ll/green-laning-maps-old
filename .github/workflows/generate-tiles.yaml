@@ -1,0 +1,70 @@
+name: generate-tiles
+on:
+  push:
+  schedule:
+    - cron: '0 4 * * SAT'
+jobs:
+  generate-tiles:
+    runs-on: ubuntu-latest
+    env:
+      area: europe/great-britain/england
+    steps:
+      - name: Maximize build space
+        run : |
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          df -h
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build
+        working-directory: ./tiles
+        run: |
+          make
+      - name: Start database
+        working-directory: ./tiles
+        run: |
+          make start-db
+      - name: Import data
+        working-directory: ./tiles
+        run: |
+          make import-data
+      - name: Download OSM data
+        working-directory: ./tiles
+        run: |
+          make download
+      - name: Import OSM data
+        working-directory: ./tiles
+        run: |
+          make import-osm
+      - name: Import borders
+        working-directory: ./tiles
+        run: |
+          make import-borders
+      - name: Import SQL
+        working-directory: ./tiles
+        run: |
+          make import-sql
+      - name: Generate tiles
+        working-directory: ./tiles
+        run: |
+          make generate-tiles
+      - name: Create or update tag
+        uses: richardsimko/update-tag@v1
+        with:
+          tag_name: weekly-generated-tiles
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create or update release
+        uses: ph1ll/release-action@release/v1.8.4
+        with:
+          allowUpdates: true
+          artifactErrorsFailBuild: true
+          artifacts: tiles/data/tiles.mbtiles
+          name: Weekly Generated Tiles
+          replacesArtifacts: true
+          tag: weekly-generated-tiles
+          token: ${{ secrets.GITHUB_TOKEN }}
