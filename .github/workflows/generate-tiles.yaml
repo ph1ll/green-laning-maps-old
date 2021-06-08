@@ -1,8 +1,5 @@
 name: generate-tiles
 on:
-  push:
-  schedule:
-    - cron: '0 4 * * SAT'
 jobs:
   generate-tiles:
     runs-on: ubuntu-latest
